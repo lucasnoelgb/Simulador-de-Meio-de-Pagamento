@@ -1,4 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+brasilia = timezone(timedelta(hours=-3))
+data_atual = datetime.now(brasilia)
 
 repetidor = "=" * 70
 
@@ -9,14 +12,37 @@ def data_compra(data):
     return data
 
 
-def opcoes_compra(pagamento, data_atual):
-    if pagamento == "0":
-        print("debito")
+def opcoes_compra(meio_pagamento, pagamento, data_atual):
+    if meio_pagamento == "0":
+        mdr = pagamento * 0.01
+        liquido = pagamento - mdr
+        data_credito = data_compra(data_atual + timedelta(days=1))
 
-    elif pagamento == "1":
-        print("Cartão de Crédito")
+        print(repetidor)
+        print(f"Data da compra:{data_atual.strftime('%d/%m/%y')}")
+        print(f"Hora da Compra: {data_atual.strftime('%H:%M:%S')}")
+        print("Meio de pagamento: 0 – Cartão de débito")
+        print(f"Valor da compra:R$", pagamento)
+        print(f"Valor do MDR:(taxa de transação): R$", mdr)
+        print("Valor liquído:", liquido)
+        print(f"Data de crédito: {data_credito.strftime('%d/%m/%y')}")
 
-    elif pagamento == "2":
+
+    elif meio_pagamento == "1":
+        print(repetidor)
+        print(f"Hora da Compra")
+        print("Meio de pagamento: 1 – Cartão de crédito à vista")
+        print(f"Valor da compra:R$", pagamento)
+        print(f"Valor do MDR:(taxa de transação): R$")
+        print("Valor liquído: ")
+
+
+
+
+
+
+
+    elif meio_pagamento == "2":
         print("Cartão de Crédito Parcelado")
 
 
@@ -33,18 +59,20 @@ def menu_inicial(data_hora):
 
 
 while True:
-    data_atual = datetime.now()
+    data_atual = datetime.now(brasilia)
     menu_inicial(data_atual)
 
-    pagamento = input("Digite o meio de pagamento: ")
-    print(repetidor)
+    meio_pagamento = input("Digite o meio de pagamento: ")
 
-    if pagamento == "9":
+    if meio_pagamento == "9":
         print("Sistema Encerrado")
+        print(repetidor)
         break
 
-    elif pagamento in ("0", "1", "2"):
-        opcoes_compra(pagamento, data_atual)
+    elif meio_pagamento in ("0", "1", "2"):
+        pagamento = input("Digite o valor da compra R$ ")
+        pagamento = int(pagamento)
+        opcoes_compra(meio_pagamento, pagamento, data_atual)
 
 
     else:
