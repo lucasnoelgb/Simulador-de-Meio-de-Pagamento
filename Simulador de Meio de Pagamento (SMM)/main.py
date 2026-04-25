@@ -2,7 +2,6 @@ from datetime import datetime, timedelta, timezone
 
 brasilia = timezone(timedelta(hours=-3))
 data_atual = datetime.now(brasilia)
-
 repetidor = "=" * 70
 
 
@@ -23,9 +22,9 @@ def opcoes_compra(meio_pagamento, pagamento, data_atual):
         print(f"Data da Compra:{data_atual.strftime('%d/%m/%y')}")
         print(f"Hora da Compra: {data_atual.strftime('%H:%M:%S')}")
         print("Meio de Pagamento: 0 – Cartão de débito")
-        print(f"Valor da Compra:R$", pagamento)
-        print(f"Valor do MDR:(taxa de transação): R$", mdr)
-        print("Valor Liquído:", liquido)
+        print(f"Valor da Compra: R$ {pagamento:.2f}")
+        print(f"Valor do MDR (taxa de transação): R$ {mdr:.2f}")
+        print(f"Valor Líquido: R$ {liquido:.2f}")
         print(f"Data de Crédito: {data_credito.strftime('%d/%m/%y')}")
 
 
@@ -38,10 +37,9 @@ def opcoes_compra(meio_pagamento, pagamento, data_atual):
         print(f"Data da Compra: {data_atual.strftime('%d/%m/%y')}")
         print(f"Hora da Compra: {data_atual.strftime('%H:%M:%S')}")
         print("Meio de Pagamento: 1 – Cartão de crédito à vista")
-        print(f"Valor da Compra: R$", pagamento)
-        print(f"Valor do MDR: R$", mdr)
-        print("Valor Liquído: R$", liquido)
-
+        print(f"Valor da Compra: R$ {pagamento:.2f}")
+        print(f"Valor do MDR (taxa de transação): R$ {mdr:.2f}")
+        print(f"Valor Líquido: R$ {liquido:.2f}")
 
 
 
@@ -50,37 +48,59 @@ def opcoes_compra(meio_pagamento, pagamento, data_atual):
         qts_parcelas = input("Digite a Quantidade de Parcelas (2 ou 3 Parcelas): ")
         mdr = pagamento * 0.05
         liquido = pagamento - mdr
-        parcela = liquido / 2
+        parcela = liquido / int(qts_parcelas)
         data_credito = data_compra(data_atual + timedelta(days=1))
+        data_primeira = data_compra(data_atual + timedelta(days=30))
+        data_segunda = data_compra(data_atual + timedelta(days=60))
 
         if qts_parcelas == "2":
 
             print(repetidor)
             print(f"Data da Compra: {data_atual.strftime('%d/%m/%y')}")
             print(f"Hora da Compra: {data_atual.strftime('%H:%M:%S')}")
-            print("Meio de Pagamento: 1 – Cartão de crédito à vista")
-            print(f"Valor da Compra: R$", pagamento)
-            print(f"Valor do MDR: R$", mdr)
-            print("Valor Liquído: R$", liquido)
+            print("Meio de Pagamento: 1 – Cartão de crédito parcelado")
+            print(f"Valor da Compra: R$ {pagamento:.2f}")
+            print(f"Valor do MDR (taxa de transação): R$ {mdr:.2f}")
+            print(f"Valor Líquido: R$ {liquido:.2f}")
             print()
-            print(parcela,"1 / 2")
-            print
-
+            print("1/2 parcela")
+            print(f"Valor liquido: R$ {parcela:.2f}")
+            print(f"Data de crédito: {data_primeira.strftime('%d/%m/%y')}")
+            print()
+            print("2/2 parcela")
+            print(f"Valor liquido: R$ {parcela:.2f}")
+            print(f"Data de crédito: {data_segunda.strftime('%d/%m/%y')}")
 
 
         elif qts_parcelas == "3":
+            data_terceira = data_compra(data_atual + timedelta(days=90))
 
             print(repetidor)
             print(f"Data da Compra: {data_atual.strftime('%d/%m/%y')}")
             print(f"Hora da Compra: {data_atual.strftime('%H:%M:%S')}")
-            print("Meio de Pagamento: 1 – Cartão de crédito à vista")
-            print(f"Valor da Compra: R$", pagamento)
-            print(f"Valor do MDR: R$", mdr)
-            print("Valor Liquído: R$", liquido)
+            print("Meio de Pagamento: 2 – Cartão de crédito parcelado")
+            print(f"Valor da Compra: R${pagamento:.2f}")
+            print(f"Valor do MDR (taxa de transação): R${mdr:.2f}")
+            print(f"Valor Líquido: R${liquido:.2f}")
+            print()
+            
+            print("1/3 parcela")
+            print(f"Valor liquido: R$ {parcela:.2f}")
+            print(f"Data de crédito: {data_primeira.strftime('%d/%m/%y')}")
+            print()
+
+            print("2/3 parcela")
+            print(f"Valor liquido: R$ {parcela:.2f}")
+            print(f"Data de crédito: {data_segunda.strftime('%d/%m/%y')}")
+            print()
+
+            print("3/3 parcela")
+            print(f"Valor liquido: R$ {parcela:.2f}")
+            print(f"Data de crédito: {data_terceira.strftime('%d/%m/%y')}")
 
 
         else:
-            print("Invalida")
+            print("Parcela Invalida")
 
 
 def menu_inicial(data_hora):
@@ -108,18 +128,15 @@ while True:
 
     elif meio_pagamento in ("0", "1", "2"):
         pagamento = input("Digite o valor da compra R$ ")
-        pagamento = int(pagamento)
+        pagamento = float(pagamento.replace(",", "."))
 
         if pagamento > 0:
             opcoes_compra(meio_pagamento, pagamento, data_atual)
 
         else:
-            print("Meio de Valor Invalido")
+            print("Valor Invalido")
 
 
 
     else:
         print("Meio de Pagamento Invalido")
-
-
-
